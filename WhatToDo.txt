@@ -1,0 +1,19 @@
+To run CellTraxx, see the user manual. The preparation procedure includes copying the entire folder "celltraxx_system" to the root of the local C drive such that its path becomes "C:\celltraxx_system". The below mentioned videos should in sequence be copied into a new folder "C:\celltraxx_data". 
+
+Two example video files are given in the folder "Example_videos_for_testing":
+
+1_Random_migration_HeLa_cells.avi
+Migrating HeLa cells captured every 10 minutes for 14 hours in Incucyte S3. Pixel size 1.24 µm. 
+
+2_Wound-healing_PC-3_cells.avi
+A wound healing experiment with PC-3 cells, imaged every 5 minutes for 15 hours. Pixel size 1.24 µm.
+
+
+To allow the user to check that CellTraxx runs as intended, all the results files after processing the above two videos are stored in the folder "Example_videos_for_testing_Results". To run CellTraxx on the first example video with the same settings as in the results files, copy the text from the file "1_celltraxx_defaults.txt" in the folder "Example_videos_for_testing" to the file "celltraxx_defaults.txt" in the folder "C:\celltraxx_system". Copy the first avi video file into the folder "C:\celltraxx_data". Then run CellTraxx through ImageJ/Fiji as described in the manual. 
+
+To run the second example video, remove the first video from the "C:\celltraxx_data" folder and paste in the second video. Copy the text from the file "2_celltraxx_defaults.txt" in the folder "Example_videos_for_testing" to the file "celltraxx_defaults.txt" in "C:\celltraxx_system", and run CellTraxx again from ImageJ/Fiji. 
+
+Results from the exmpale videos are included in the manuscript Figure 2-3 and Figure S1-2 for 1_Random_migration_HeLa_cells.avi and as one of the replicate samples in Figure 8c-f.
+
+
+
