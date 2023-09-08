@@ -1,31 +1,31 @@
 Wound healing mode              no
 Perform flat field correction   no
-Perform image shift correction  no
-Perform interactive tuning      no
+Perform image shift correction  yes
+Perform interactive tuning      yes
 Version                         4.5
 Track smoothing iterations      0
 Results folder drive letter     C
-Results folder name             TEST_else_GFR=13um_d=9-67um_cut=11um
-First part of folder name       TEST_else
-Pixel size [um]                 0.62
-Gaussian filter radius [um]     13
-Smallest cell diameter [um]     9
-Largest  cell diameter [um]     67
-Cutting cell diameter [um]      11
-Top    crop margin [pixels]     42
+Results folder name             1_Random_migration_HeLa_cells_GFR=20um_d=16-48um_cut=19um
+First part of folder name       1_Random_migration_HeLa_cells
+Pixel size [um]                 1.24
+Gaussian filter radius [um]     20
+Smallest cell diameter [um]     16
+Largest  cell diameter [um]     48
+Cutting cell diameter [um]      19
+Top    crop margin [pixels]     20
 Bottom crop margin [pixels]     20
 Left   crop margin [pixels]     20
 Right  crop margin [pixels]     20
-Time between images      [min]  240
-Highest cell velocity [um/min]  0.2
-Shortest cell track [images]    5
+Time between images      [min]  10
+Highest cell velocity [um/min]  4
+Shortest cell track [images]    20
 First image number              0
-Last image number               25
+Last image number               84
 Image number increment          1
-Make identified cell videos     yes
+Make identified cell videos     no
 Make matched cell videos        no
-Make valid track videos         no
-Tracking dot diameter [um]      8
+Make valid track videos         yes
+Tracking dot diameter [um]      9
 Valid track images contrast     2
 Scalebar color                  white
 Draw cell outline               yes
@@ -38,7 +38,7 @@ Write cut cell images           no
 Write identified cell images    no
 Write matched cell images       no
 Write valid track images        no
-Keep cells from previous image  no
+Keep cells from previous image  yes
 Segmentation limit [SDs]        1.5
 # bins in histogram             100
 Tuning image code               0
