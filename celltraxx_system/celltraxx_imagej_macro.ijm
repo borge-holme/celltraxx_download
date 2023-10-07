@@ -20,7 +20,7 @@ var highest_cell_velocity, 				last_image;
 var shortest_cell_track, 				increment;
 var make_identified_cell_videos, 		tracking__dot_diameter;	
 var make_matched_cell_videos,			valid_track_image_contrast;													
-var make_valid_track_videos,	        scalebar_color;																										
+var make_valid_track_videos,	        scale_bar_color;																										
 var longest_image_shift,				cutting__cell_diameter;
 var segmentation_limit,					nof_bins_in_histogram,			tuning_image_code;	
 var dat_dir, sys_dir, tun_dir, dat_drive_letter;
@@ -93,7 +93,7 @@ entries=split(textlines[i++]," \t");		if( entries[4]=="yes" || entries[4]=="Yes"
 entries=split(textlines[i++]," \t");		if( entries[4]=="yes" || entries[4]=="Yes" || entries[4]=="YES" ) make_valid_track_videos        = true; else make_valid_track_videos        = false; 
 entries=split(textlines[i++]," \t");		tracking__dot_diameter 		= parseFloat(entries[4]); 
 entries=split(textlines[i++]," \t");		valid_track_image_contrast  = parseFloat(entries[4]); 
-entries=split(textlines[i++]," \t");		scalebar_color = entries[2];  			
+entries=split(textlines[i++]," \t");		scale_bar_color = entries[3];  			
 entries=split(textlines[i++]," \t");		if( entries[3]=="yes" || entries[3]=="Yes" || entries[3]=="YES" ) draw_cell_outline	             = true; else draw_cell_outline              = false; 
 entries=split(textlines[i++]," \t");		if( entries[4]=="yes" || entries[4]=="Yes" || entries[4]=="YES" ) draw_cell_track_line           = true; else draw_cell_track_line           = false; 
 entries=split(textlines[i++]," \t");		if( entries[4]=="yes" || entries[4]=="Yes" || entries[4]=="YES" ) write_mirror_margin_images     = true; else write_mirror_margin_images     = false; 
@@ -110,7 +110,7 @@ entries=split(textlines[i++]," \t");		nof_bins_in_histogram  		= parseInt(  entr
 entries=split(textlines[i++]," \t");		tuning_image_code			= parseInt(  entries[3]); 
 
 if( perform_flat_field_correction  ) ffc_string = "_FFC"; else  ffc_string = "";			// Addition to bitmap file names if flat field correction is on, allowing both types of images to exist 
-if( scalebar_color == "No_scalebar" ) scalebar_color = ""; 									// Coding no color with "No_scalebar" in settings file to avoid read error 
+if( scale_bar_color == "No_scalebar" ) scale_bar_color = ""; 									// Coding no color with "No_scalebar" in settings file to avoid read error 
 if( first_part_of_results_folder_name == "#" ) first_part_of_results_folder_name = ""; 		// Coding no prefix with # in settings file to avoid read error 
 default_part_of_results_folder_name = "GFR="+gaussian_filter_radius+"um_d="+smallest_cell_diameter+"-"+largest__cell_diameter+"um_cut="+cutting__cell_diameter+"um"; 
 
@@ -136,7 +136,7 @@ Dialog.addNumber(  "Shortest cell track",                       shortest_cell_tr
 Dialog.addMessage( "Output", 18); 
 Dialog.addCheckbox("Generate videos with identified cells",              make_identified_cell_videos); 		Dialog.addToSameRow();		Dialog.addNumber("Tracking  dot diameter",            tracking__dot_diameter, 1, 8, "um"   );		
 Dialog.addCheckbox("Generate videos with matched cells",                    make_matched_cell_videos); 		Dialog.addToSameRow();		Dialog.addNumber("Valid track image contrast",    valid_track_image_contrast, 1, 8, "times");	
-Dialog.addCheckbox("Generate videos with valid tracks",                      make_valid_track_videos); 		Dialog.addToSameRow(); 		Dialog.addString("Scale bar color", scalebar_color, 12);					
+Dialog.addCheckbox("Generate videos with valid tracks",                      make_valid_track_videos); 		Dialog.addToSameRow(); 		Dialog.addString("Scale bar color", scale_bar_color, 12);					
 
 Dialog.show();	
 
@@ -157,13 +157,13 @@ shortest_cell_track 				= Dialog.getNumber();				increment 							= Dialog.getNu
 // Output
 make_identified_cell_videos 		= Dialog.getCheckbox();				tracking__dot_diameter 				= Dialog.getNumber();	
 make_matched_cell_videos			= Dialog.getCheckbox();				valid_track_image_contrast		 	= Dialog.getNumber();													
-make_valid_track_videos	            = Dialog.getCheckbox();				scalebar_color 						= Dialog.getString();																										
+make_valid_track_videos	            = Dialog.getCheckbox();				scale_bar_color 						= Dialog.getString();																										
 
 // Updating variables in case checkboxes were changed by user 
 if( perform_image_shift_correction    ) longest_image_shift = 30;   else longest_image_shift = 0;		// Just setting a quite large default value since the maximum image shift no longer reduces the processing speed but only sets the size of the search matrix 
 if( perform_flat_field_correction     ) ffc_string = "_FFC";        else ffc_string = "";				// Addition to image names   
 //	if( tracking__dot_diameter == 0 ) draw_cell_center_of_mass = false; else draw_cell_center_of_mass = true; 
-if( scalebar_color == "" ) scalebar_color = "No_scalebar"; 
+if( scale_bar_color == "" ) scale_bar_color = "No_scalebar"; 
 
 // Updating name of results folder based on current settings and generating full name
 default_part_of_results_folder_name = "GFR="+gaussian_filter_radius+"um_d="+smallest_cell_diameter+"-"+largest__cell_diameter+"um_cut="+cutting__cell_diameter+"um"; 
@@ -217,12 +217,13 @@ for (i = 0; i < list.length; i++){
 				if( current_last > slices-1 ) current_last = slices-1;		 	// Making sure that last image to process actually exists 	
 				File.append(imagename+"				"+first_image+"			"+current_last, sys_dir+"celltraxx_bitmaps2process.txt");		// Generating list of file names to copy into CellTrax command file and to read back by bmp2avi.ijm. Reading one fewer image since the two last in .avi are the same.
 
+
 				// ROUTINE FOR PERFORMING A TYPE OF FLATFIELD CORRECTION, ASSUMING ALL PARTS OF THE BACKGROUND ARE VISIBLE MOST OF THE TIME WHEN CELLS MOVE AROUND
 	   			if( perform_flat_field_correction ) {
 	   				print("Performing flat field correction on video " + substring(imagename, 0, k) + ".avi"); 
 	   				print("This might take several seconds..."); 
 	   				run("Z Project...", "projection=Median");
-	   				run("Gaussian Blur...", "sigma=2");
+//	   				run("Gaussian Blur...", "sigma=2");						// Better correction at sharp edges without the filtering
 	   				saveAs("bmp", dat_dir + imagename + "_Background");		// Saving smoothed median image into input image folder for checking 
 	   				Median = getTitle();
 					imageCalculator("Divide create 32-bit stack", Video, Median);
@@ -797,14 +798,14 @@ function Write_Settings_To_File()
 	File.append(    "Gaussian filter radius [um]     "+gaussian_filter_radius, 		      												      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "Smallest cell diameter [um]     "+smallest_cell_diameter, 		      												      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "Largest  cell diameter [um]     "+largest__cell_diameter, 		      												      sys_dir+"celltraxx_defaults.txt");		
-	File.append(    "Cutting cell diameter [um]      "+cutting__cell_diameter, 		      												      sys_dir+"celltraxx_defaults.txt");		
+	File.append(    "Cutting  cell diameter [um]     "+cutting__cell_diameter, 		      												      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "Top    crop margin [pixels]     "+top____crop_margin, 			      												      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "Bottom crop margin [pixels]     "+bottom_crop_margin, 			      												      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "Left   crop margin [pixels]     "+left___crop_margin, 		      	  												      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "Right  crop margin [pixels]     "+right__crop_margin, 			      												      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "Time between images      [min]  "+time_between_images, 		      												      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "Highest cell velocity [um/min]  "+highest_cell_velocity, 		      												      sys_dir+"celltraxx_defaults.txt");		
-	File.append(    "Shortest cell track [images]    "+shortest_cell_track, 		      												      sys_dir+"celltraxx_defaults.txt");		
+	File.append(    "Shortest cell track   [images]  "+shortest_cell_track, 		      												      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "First image number              "+first_image,                       												      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "Last image number               "+last_image,                        												      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "Image number increment          "+increment,                         												      sys_dir+"celltraxx_defaults.txt");		
@@ -812,8 +813,8 @@ function Write_Settings_To_File()
 	if( make_matched_cell_videos 		) string = "yes"; else string = "no"; File.append(    "Make matched cell videos        "+string,      sys_dir+"celltraxx_defaults.txt");		
 	if( make_valid_track_videos 		) string = "yes"; else string = "no"; File.append(    "Make valid track videos         "+string,      sys_dir+"celltraxx_defaults.txt");		
 	File.append(    "Tracking dot diameter [um]      "+tracking__dot_diameter, 		      												      sys_dir+"celltraxx_defaults.txt");		
-	File.append(    "Valid track images contrast     "+valid_track_image_contrast,        												      sys_dir+"celltraxx_defaults.txt");		
-	File.append(    "Scalebar color                  "+scalebar_color,                    												      sys_dir+"celltraxx_defaults.txt");		
+	File.append(    "Valid track image contrast      "+valid_track_image_contrast,        												      sys_dir+"celltraxx_defaults.txt");		
+	File.append(    "Scale bar color                 "+scale_bar_color,                    												      sys_dir+"celltraxx_defaults.txt");		
 	if( draw_cell_outline 	            ) string = "yes"; else string = "no"; File.append(    "Draw cell outline               "+string,      sys_dir+"celltraxx_defaults.txt");		
 	if( draw_cell_track_line 			) string = "yes"; else string = "no"; File.append(    "Draw cell track line            "+string,      sys_dir+"celltraxx_defaults.txt");		
 	if( write_mirror_margin_images 		) string = "yes"; else string = "no"; File.append(    "Write mirror margin images      "+string,      sys_dir+"celltraxx_defaults.txt");		

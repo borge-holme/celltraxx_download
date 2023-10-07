@@ -1,8 +1,8 @@
 Wound healing mode              no
 Perform flat field correction   no
 Perform image shift correction  yes
-Perform interactive tuning      yes
-Version                         4.5
+Perform interactive tuning      no
+Version                         4.6
 Track smoothing iterations      0
 Results folder drive letter     C
 Results folder name             1_Random_migration_HeLa_cells_GFR=20um_d=16-48um_cut=19um
@@ -26,8 +26,8 @@ Make identified cell videos     no
 Make matched cell videos        no
 Make valid track videos         yes
 Tracking dot diameter [um]      9
-Valid track images contrast     2
-Scalebar color                  white
+Valid track image contrast      2
+Scale bar color                 white
 Draw cell outline               yes
 Draw cell track line            yes
 Write mirror margin images      no

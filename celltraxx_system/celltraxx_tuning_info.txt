@@ -1,2 +1,2 @@
-First image grey level limit 128.427
-First image path and name    C:/celltraxx_data/EM9-139Hos143b_G2_1__02_0000.bmp
+First image grey level limit 127.033
+First image path and name    C:/celltraxx_data/1_Random_migration_HeLa_cells__02_0000.bmp
