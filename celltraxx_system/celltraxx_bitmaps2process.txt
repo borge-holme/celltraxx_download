@@ -1,0 +1,3 @@
+Bitmap names (without XXXX.bmp)		First image number	Last image number
+1_Random_migration_HeLa_cells_				0			84
+stop
